@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine;
 
 public class BabyMovement : BabyBehaviour
 {
@@ -32,21 +31,37 @@ public class BabyMovement : BabyBehaviour
     protected override void OnStateChanged(BabyState state)
     {
         base.OnStateChanged(state);
-        if (state == BabyState.CRAWLING) FindTargetPosition();
+        if (state == BabyState.WANDER) {
+            targetPosition = GetRandomPosition();
+            canMove = true;
+        }
+        else if (state == BabyState.WANTS_TO_ESCAPE)
+        {
+            targetPosition = GetEscapePosition();
+            canMove = true;
+        }
         else canMove = false;
     }
 
-    private void FindTargetPosition()
+    private Vector3 GetEscapePosition()
     {
         var colliders = Physics2D.OverlapCircleAll(transform.position, 10, wallLayer);
-        if (colliders.Length > 0 && UnityEngine.Random.Range(0, 1.0f) < .25f)
+        var closestCollider = colliders[0];
+        foreach(var collider in colliders)
         {
-            var collider = colliders[UnityEngine.Random.Range(0, colliders.Length)];
-            targetPosition = collider.ClosestPoint(transform.position);
-        }
-        else targetPosition = UnityEngine.Random.insideUnitCircle * 2.5f;
+            var currentDistance = Vector3.Distance(closestCollider.ClosestPoint(transform.position), transform.position);
+            var distanceToCompare = Vector3.Distance(collider.ClosestPoint(transform.position), transform.position);
 
-        canMove = true;
+            if (distanceToCompare < currentDistance) closestCollider = collider;
+        }
+        return closestCollider.ClosestPoint(transform.position);
+    }
+    private Vector3 GetRandomPosition()
+    {
+        var direction = UnityEngine.Random.Range(0, 2) == 0 ? Vector3.up : Vector3.right;
+        var sign = UnityEngine.Random.Range(0, 2) == 0 ? -1 : 1;
+        var randomPosition = (direction * sign) + transform.position;
+        return randomPosition;
     }
 
     private void Update()

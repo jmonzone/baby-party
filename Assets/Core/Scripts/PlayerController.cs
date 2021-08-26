@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
         var collider = Physics2D.OverlapCircle(transform.position, 0.5f, babyLayer);
         if (collider)
         {
-            Debug.Log(collider.name);
             pickedUpBaby = collider.GetComponentInParent<BabyView>();
             pickedUpBaby.PickUp(carryPosition);
         }

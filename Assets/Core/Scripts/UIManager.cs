@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private RoundManager roundManager;
     [SerializeField] private MoneyManager moneyManager;
     [SerializeField] private UpgradeManager upgradeManager;
+    [SerializeField] private GameOverManager gameOverManager;
 
     [Header("UI References")]
     [SerializeField] private Text roundText;
@@ -15,11 +16,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text timeRemainingText;
     [SerializeField] private Button startRoundbutton;
     [SerializeField] private Transform upgradeButtonsParent;
+    [SerializeField] private GameObject gameOverView;
 
     private List<UpgradeView> upgradeButtons = new List<UpgradeView>();
 
     private void Awake()
     {
+        gameOverManager.OnGameOver += OnGameOver;
         roundManager.OnRoundHasStarted += OnRoundStarted;
         roundManager.OnRoundHasEnded += OnRoundEnded;
         roundManager.OnTimeRemainingChanged += UpdateTimeRemainingText;
@@ -48,6 +51,11 @@ public class UIManager : MonoBehaviour
     {
         UpdateRoundText(round + 1);
         startRoundbutton.gameObject.SetActive(true);
+    }
+
+    private void OnGameOver()
+    {
+        gameOverView.gameObject.SetActive(true);
     }
 
     private void UpdateRoundText(int round)

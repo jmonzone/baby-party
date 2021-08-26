@@ -401,6 +401,7 @@ GameObject:
   - component: {fileID: 3295881029070717033}
   - component: {fileID: 5180847114162132508}
   - component: {fileID: -8204962065984553037}
+  - component: {fileID: 8761555461730364475}
   m_Layer: 7
   m_Name: Simple Baby
   m_TagString: Untagged
@@ -480,6 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b725898e377e8f24a887f1e2b525474e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  escapeSpeed: 2
 --- !u!114 &3295881029070717033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,10 +508,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea829de86fa34e4da216a8d7156cc20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseRestorationSpeed: 20
+  baseDepletionSpeed: 5
   blanketLayer:
     serializedVersion: 2
     m_Bits: 256
-  restDepletionSpeed: 6.01
 --- !u!114 &-8204962065984553037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,6 +529,22 @@ MonoBehaviour:
   crySprite: {fileID: 21300000, guid: d3ca82c61ed0530428d07bcc20230d04, type: 3}
   sleepSprite: {fileID: 21300000, guid: e6c59212d1106c8449bf8616891ab922, type: 3}
   yawnSprite: {fileID: 3892484126532914232}
+--- !u!114 &8761555461730364475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3902659243775198269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 685b84d13bd07472bab49a35033a4b4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cryRadius: 2
+  cryAfflictedLayers:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &5093951567836213861
 GameObject:
   m_ObjectHideFlags: 0

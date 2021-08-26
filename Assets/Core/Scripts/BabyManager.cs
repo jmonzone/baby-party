@@ -7,12 +7,14 @@ public class BabyManager : MonoBehaviour
     [SerializeField] private BabyView babyPrefab;
     private ObjectPool<BabyView> babyPool;
 
+    public event Action<BabyView> OnBabyHasEscaped;
+
     private void Awake()
     {
         roundManager.OnRoundHasStarted += _ => SpawnBabies();
         babyPool = new ObjectPool<BabyView>(babyPrefab, 10, (baby) =>
         {
-            baby.Init(roundManager);
+            baby.Init(roundManager, onBabyHasEscaped: () => OnBabyHasEscaped?.Invoke(baby) );
         });
     }
 

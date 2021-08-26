@@ -5,7 +5,8 @@ using UnityEngine;
 public enum BabyState
 {
     IDLE,
-    CRAWLING,
+    WANDER,
+    WANTS_TO_ESCAPE,
     ESCAPE,
     CRYING,
     SLEEPING,
@@ -17,7 +18,7 @@ public class BabyStateMachine : BabyBehaviour
     [SerializeField] private LayerMask wallLayer;
 
     private BabyState currentState;
-    public new BabyState CurrentState
+    public BabyState CurrentState
     {
         get => currentState;
         private set
@@ -62,14 +63,16 @@ public class BabyStateMachine : BabyBehaviour
     protected override void OnSleepEnded()
     {
         base.OnSleepEnded();
-        CurrentState = BabyState.CRAWLING;
+        CurrentState = BabyState.WANDER;
     }
-
+    protected override void OnScare()
+    {
+        base.OnScare();
+        CurrentState = BabyState.WANTS_TO_ESCAPE;
+    }
     protected override void OnDestinationReached()
     {
         base.OnDestinationReached();
-        if (CurrentState != BabyState.CRAWLING) return;
-
         var colliders = Physics2D.OverlapCircleAll(transform.position, 0.25f, wallLayer);
         if (colliders.Length > 0) CurrentState = BabyState.ESCAPE;
         else CurrentState = BabyState.IDLE;
@@ -88,7 +91,11 @@ public class BabyStateMachine : BabyBehaviour
             {
                 case BabyState.IDLE:
                     yield return new WaitForSeconds(UnityEngine.Random.Range(1.0f, 5.0f));
-                    if (CurrentState == BabyState.IDLE) CurrentState = BabyState.CRAWLING;
+                    if (CurrentState == BabyState.IDLE)
+                    {
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) > .25) CurrentState = BabyState.WANDER;
+                        else CurrentState = BabyState.WANTS_TO_ESCAPE;
+                    }
                     break;
             }
             yield return null;

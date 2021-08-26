@@ -18,6 +18,7 @@ public abstract class BabyBehaviour : MonoBehaviour
         baby.OnBabyHasSpawned += OnSpawn;
         baby.OnBabyHasBeenPickedUp += OnPickUp;
         baby.OnBabyHasBeenDropped += OnDropped;
+        baby.OnBabyHasBeenScared += OnScare;
 
         state = GetComponent<BabyStateMachine>();
         state.OnCurrentStateHasChanged += OnStateChanged;
@@ -34,6 +35,7 @@ public abstract class BabyBehaviour : MonoBehaviour
     protected virtual void OnPickUp() { }
     protected virtual void OnDropped() { }
     protected virtual void OnRestZero() { }
+    protected virtual void OnScare() { }
     protected virtual void OnSleepStarted() { }
     protected virtual void OnSleepEnded() { }
     protected virtual void OnStateChanged(BabyState state) { }
@@ -45,10 +47,13 @@ public class BabyView : MonoBehaviour
     public event Action OnBabyHasSpawned;
     public event Action OnBabyHasBeenPickedUp;
     public event Action OnBabyHasBeenDropped;
+    public event Action OnBabyHasBeenScared;
 
-    public void Init(RoundManager roundManager)
+    public void Init(RoundManager roundManager, Action onBabyHasEscaped)
     {
         roundManager.OnRoundHasEnded += _ => OnRoundEnded();
+        var escape = GetComponent<BabyEscape>();
+        escape.OnBabyHasEscaped += onBabyHasEscaped;
     }
 
     public void Spawn(Vector3 position)
@@ -71,6 +76,11 @@ public class BabyView : MonoBehaviour
         transform.parent = null;
         Debug.Log($"{name} has been dropped.");
         OnBabyHasBeenDropped?.Invoke();
+    }
+
+    public void Scare()
+    {
+        OnBabyHasBeenScared?.Invoke();
     }
 
     private void OnRoundEnded()

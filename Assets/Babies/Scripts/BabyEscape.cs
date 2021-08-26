@@ -22,6 +22,7 @@ public class BabyEscape : BabyBehaviour
     public event Action OnEscapeHasStarted;
     public event Action OnEscapeHasCanceled;
     public event Action OnBabyHasEscaped;
+
     protected override void OnStateChanged(BabyState state)
     {
         base.OnStateChanged(state);
@@ -38,7 +39,7 @@ public class BabyEscape : BabyBehaviour
 
     private void Escape()
     {
-        Debug.Log("Baby has escaped.");
         gameObject.SetActive(false);
+        OnBabyHasEscaped?.Invoke();
     }
 }
